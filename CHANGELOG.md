@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3
+
+- Add searchable declarative settings for Obsidian 1.13 while retaining the legacy settings fallback.
+- Use broadly supported border styling for durable colored underlines.
+- Publish GitHub build-provenance attestations for release assets.
+
 ## 0.1.2
 
 - Align esbuild with Vitest's Vite peer range so clean Linux installs are reproducible.

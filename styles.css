@@ -17,15 +17,13 @@ mark[data-synthesis-color="green"] { background: color-mix(in srgb, var(--synthe
 mark[data-synthesis-color="rose"] { background: color-mix(in srgb, var(--synthesis-rose) 28%, transparent); }
 
 span[data-synthesis-underline] {
-  text-decoration-line: underline;
-  text-decoration-thickness: 0.15em;
-  text-underline-offset: 0.16em;
+  border-bottom: 0.15em solid;
 }
 
-span[data-synthesis-underline="amber"] { text-decoration-color: var(--synthesis-amber); }
-span[data-synthesis-underline="blue"] { text-decoration-color: var(--synthesis-blue); }
-span[data-synthesis-underline="green"] { text-decoration-color: var(--synthesis-green); }
-span[data-synthesis-underline="rose"] { text-decoration-color: var(--synthesis-rose); }
+span[data-synthesis-underline="amber"] { border-bottom-color: var(--synthesis-amber); }
+span[data-synthesis-underline="blue"] { border-bottom-color: var(--synthesis-blue); }
+span[data-synthesis-underline="green"] { border-bottom-color: var(--synthesis-green); }
+span[data-synthesis-underline="rose"] { border-bottom-color: var(--synthesis-rose); }
 
 .synthesis-selection-toolbar {
   align-items: center;

@@ -1,10 +1,165 @@
-import { PluginSettingTab, Setting, type App } from "obsidian";
+import {
+  PluginSettingTab,
+  Setting,
+  type App,
+  type SettingDefinitionItem
+} from "obsidian";
 import type SynthesisLearningPlugin from "./main";
 import { availableEnglishVoices } from "./voice";
 
 export class SynthesisSettingTab extends PluginSettingTab {
   constructor(app: App, private readonly plugin: SynthesisLearningPlugin) {
     super(app, plugin);
+  }
+
+  getSettingDefinitions(): SettingDefinitionItem[] {
+    const voices = availableEnglishVoices();
+    const voiceOptions: Record<string, string> = { "": "Automatic" };
+    for (const voice of voices) voiceOptions[voice.voiceURI] = `${voice.name} · ${voice.lang}`;
+
+    return [
+      {
+        type: "group",
+        heading: "AI tutor connection",
+        items: [
+          {
+            name: "Provider privacy",
+            desc: "Only user-triggered requests and selected context are sent to the configured provider. Marks, voices, and manual cards work without an API key."
+          },
+          {
+            name: "API key",
+            desc: "Stored in this device's Obsidian secret storage. It is not written to the vault or plugin data.",
+            aliases: ["OpenAI key", "provider key"],
+            render: (setting) => {
+              setting.addText((text) => {
+                text.inputEl.type = "password";
+                text.setPlaceholder("sk-…")
+                  .setValue(this.plugin.getApiKey())
+                  .onChange((value) => this.plugin.setApiKey(value.trim()));
+              });
+            }
+          },
+          {
+            name: "API protocol",
+            desc: "Use Responses for OpenAI. Choose Chat Completions for compatible providers that do not expose /responses.",
+            control: {
+              type: "dropdown",
+              key: "protocol",
+              defaultValue: "responses",
+              options: {
+                responses: "OpenAI Responses API",
+                "chat-completions": "Chat Completions compatible"
+              }
+            }
+          },
+          {
+            name: "API base URL",
+            desc: "Example: https://api.openai.com/v1",
+            control: { type: "text", key: "apiBaseUrl" }
+          },
+          {
+            name: "Model",
+            desc: "Provider model ID",
+            control: { type: "text", key: "model" }
+          },
+          {
+            name: "Maximum context characters",
+            desc: "Long notes are truncated before they leave the device.",
+            control: {
+              type: "number",
+              key: "maxContextCharacters",
+              min: 2_000,
+              step: 1_000
+            }
+          },
+          {
+            name: "Vault search results",
+            desc: "Maximum local excerpts added to a vault-scoped question.",
+            control: {
+              type: "slider",
+              key: "vaultResultLimit",
+              min: 1,
+              max: 10,
+              step: 1
+            }
+          }
+        ]
+      },
+      {
+        type: "group",
+        heading: "Saved learning notes",
+        items: [
+          {
+            name: "Saved explanations folder",
+            desc: "Folder for one-click tutor notes.",
+            control: { type: "text", key: "explanationFolder" }
+          },
+          {
+            name: "Learning cards folder",
+            desc: "Shared folder for vocabulary and terminology cards.",
+            control: { type: "text", key: "cardFolder" }
+          },
+          {
+            name: "Excluded vault folders",
+            desc: "Comma-separated folders skipped by vault retrieval.",
+            control: { type: "text", key: "excludedFolders" }
+          }
+        ]
+      },
+      {
+        type: "group",
+        heading: "English reading voices",
+        items: [
+          {
+            name: "Voice slots",
+            desc: "Male and female are user-defined voice slots. The plugin does not infer a person's gender from a voice name."
+          },
+          {
+            name: "Female voice",
+            desc: voices.length > 0 ? "Choose an English voice installed on this device." : "No English system voices are currently available.",
+            control: {
+              type: "dropdown",
+              key: "femaleVoiceUri",
+              defaultValue: "",
+              options: voiceOptions
+            }
+          },
+          {
+            name: "Male voice",
+            desc: voices.length > 0 ? "Choose an English voice installed on this device." : "No English system voices are currently available.",
+            control: {
+              type: "dropdown",
+              key: "maleVoiceUri",
+              defaultValue: "",
+              options: voiceOptions
+            }
+          },
+          {
+            name: "Reading speed",
+            desc: "1.0 is the system voice's normal speed.",
+            control: {
+              type: "slider",
+              key: "speechRate",
+              min: 0.5,
+              max: 1.5,
+              step: 0.05,
+              displayFormat: (value) => `${value.toFixed(2)}×`
+            }
+          }
+        ]
+      }
+    ];
+  }
+
+  getControlValue(key: string): unknown {
+    return (this.plugin.settings as unknown as Record<string, unknown>)[key];
+  }
+
+  async setControlValue(key: string, value: unknown): Promise<void> {
+    const settings = this.plugin.settings as unknown as Record<string, unknown>;
+    if (!(key in settings)) return;
+    settings[key] = value;
+    await this.plugin.saveSettings();
   }
 
   display(): void {
