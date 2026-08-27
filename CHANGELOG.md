@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+- Align esbuild with Vitest's Vite peer range so clean Linux installs are reproducible.
+- Move CI and release jobs to the current Node 24 GitHub Actions toolchain.
+
 ## 0.1.1
 
 - Publish the verified first release with a synchronized npm lockfile for reproducible GitHub Actions builds.
