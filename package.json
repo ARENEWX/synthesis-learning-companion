@@ -1,6 +1,6 @@
 {
   "name": "synthesis-learning-companion",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Selection-based AI tutoring, English reading voices, and durable learning cards for Obsidian.",
   "main": "main.js",
   "scripts": {

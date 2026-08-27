@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Publish the verified first release with a synchronized npm lockfile for reproducible GitHub Actions builds.
+
 ## 0.1.0
 
 - Add a contextual selection toolbar with four-color highlights and underlines.
