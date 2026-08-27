@@ -2,8 +2,6 @@
 
 Synthesis Learning Companion turns an Obsidian Markdown note into a focused reading desk: select a passage, mark it, ask an AI tutor in the right sidebar, hear English aloud, and save the result as a durable note or learning card.
 
-> The plugin is currently preparing for its first Community plugins submission. Manual installation is available from the release assets once the first public release is published.
-
 ## What it does
 
 - Shows a compact toolbar after selecting text in the Markdown editor.
@@ -52,7 +50,7 @@ OpenAI Responses requests set `store: false`. Your configured provider still pro
 
 Reading aloud uses the Web Speech API and English voices installed on the device. The settings expose two user-defined slots named **Female voice** and **Male voice**. These labels are convenient presets chosen by the learner; the plugin does not infer a person's gender from voice metadata.
 
-Long notes are split at sentence boundaries so complete-note reading is more reliable. Voice availability and quality depend on the operating system. AI-generated cloud speech is not included in version 0.1.0.
+Long notes are split at sentence boundaries so complete-note reading is more reliable. Voice availability and quality depend on the operating system. AI-generated cloud speech is not included.
 
 ## Installation for development
 
