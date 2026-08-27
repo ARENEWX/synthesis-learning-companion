@@ -1,0 +1,27 @@
+import esbuild from "esbuild";
+import process from "process";
+import { builtinModules } from "module";
+
+const banner = `/* Synthesis Learning Companion - MIT License */`;
+const prod = process.argv[2] === "production";
+
+const context = await esbuild.context({
+  banner: { js: banner },
+  entryPoints: ["src/main.ts"],
+  bundle: true,
+  external: ["obsidian", "electron", ...builtinModules],
+  format: "cjs",
+  target: "es2018",
+  logLevel: "info",
+  sourcemap: prod ? false : "inline",
+  treeShaking: true,
+  outfile: "main.js"
+});
+
+if (prod) {
+  await context.rebuild();
+  await context.dispose();
+} else {
+  await context.watch();
+}
+
